@@ -16,7 +16,7 @@ QUnit.test("test: Web App Manifest", function (assert) {
 				{ key: "value" },
 			]),
 		() => {
-			assert.equal(cur_frm.doc.key, "value");
+			assert.equal(frm.doc.key, "value");
 		},
 		() => done(),
 	]);

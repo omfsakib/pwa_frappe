@@ -11,7 +11,7 @@ frappe.ui.form.on("Service Worker", {
 		});
 		frappe.call({
 			method: "generate_vapid_key",
-			doc: cur_frm.doc,
+			doc: frm.doc,
 			args: {},
 			callback: function (r) {
 				if (cur_dialog) {
@@ -20,7 +20,7 @@ frappe.ui.form.on("Service Worker", {
 				if (r.message) {
 					frappe.msgprint(r.message.message);
 				}
-				cur_frm.refresh();
+				frm.refresh();
 			},
 		});
 	},
