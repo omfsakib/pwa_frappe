@@ -1,8 +1,8 @@
 app_name = "pwa_frappe"
 app_title = "Pwa Frappe"
-app_publisher = "tariqul@glascutr.com"
+app_publisher = "omfsakib@gmail.com"
 app_description = "Pwa Frappe"
-app_email = "tariqul@glascutr.com"
+app_email = "omfsakib@gmail.com"
 app_license = "mit"
 
 # Apps

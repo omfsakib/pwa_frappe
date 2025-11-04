@@ -115,61 +115,64 @@ function pushNotification(message) {
 	});
 }
 
+let installPromptEvent = null;
+
 const vapidKey = "{{ vapid_public_key }}";
+
+/**
+ * Convert a base64 public key to a Uint8Array (required by PushManager)
+ */
+function urlBase64ToUint8Array(base64String) {
+	const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+	const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+
+	const rawData = window.atob(base64);
+	const outputArray = new Uint8Array(rawData.length);
+
+	for (let i = 0; i < rawData.length; ++i) {
+		outputArray[i] = rawData.charCodeAt(i);
+	}
+	return outputArray;
+}
 
 if ("serviceWorker" in navigator) {
 	if (vapidKey) {
 		console.log("[PWA] Set VAPID key for push notifications");
-		window.vapidPublicKey = new Uint8Array(vapidKey);
+		window.vapidPublicKey = urlBase64ToUint8Array(vapidKey);
 	}
 
 	window.addEventListener("load", function () {
-		if (navigator.serviceWorker.controller) {
-			console.log("[PWA] ServiceWorker found, no need to register");
-		} else {
-			navigator.serviceWorker.register("/sw.js").then(
-				function (registration) {
-					// Registration was successful
-					console.log(
-						"[PWA] ServiceWorker registration successful with scope: " +
-							registration.scope
-					);
+		// Register the Service Worker
+		navigator.serviceWorker
+			.register("/sw.js")
+			.then(function (registration) {
+				console.log(
+					"[PWA] ServiceWorker registration successful with scope: " + registration.scope
+				);
 
-					if (window.vapidPublicKey) {
-						console.log("[PWA] Subscribing to push notifications");
+				if (window.vapidPublicKey) {
+					console.log("[PWA] Subscribing to push notifications...");
 
-						registration.pushManager
-							.subscribe({
-								userVisibleOnly: true,
-								applicationServerKey: window.vapidPublicKey,
-							})
-							.then(
-								function (pushSubscription) {
-									console.log(pushSubscription.subscriptionId);
-									console.log(pushSubscription.endpoint);
-									// The push subscription details needed by the application
-									// server are now available, and can be sent to it using,
-									// for example, an XMLHttpRequest.
-								},
-								function (error) {
-									// During development it often helps to log errors to the
-									// console. In a production environment it might make sense to
-									// also report information about errors back to the
-									// application server.
-									console.log(error);
-								}
-							);
-					}
-				},
-				function (err) {
-					// registration failed :(
-					console.log("[PWA] ServiceWorker registration failed: ", err);
+					registration.pushManager
+						.subscribe({
+							userVisibleOnly: true,
+							applicationServerKey: window.vapidPublicKey,
+						})
+						.then(function (subscription) {
+							console.log("[PWA] Push subscription successful");
+							console.log("Endpoint:", subscription.endpoint);
+							console.log("Subscription:", subscription);
+						})
+						.catch(function (error) {
+							console.error("[PWA] Push subscription failed:", error);
+						});
 				}
-			);
-		}
+			})
+			.catch(function (err) {
+				console.error("[PWA] ServiceWorker registration failed:", err);
+			});
 	});
 
-	var installPromptEvent = null;
 	window.addEventListener("beforeinstallprompt", function (e) {
 		e.preventDefault();
 		installPromptEvent = e;
@@ -178,9 +181,7 @@ if ("serviceWorker" in navigator) {
 	});
 
 	window.addEventListener("appinstalled", hideAddToHomeScreen);
-	// Push notifications
 
-	// Request to allow push notifications
 	if (window.vapidPublicKey) {
 		if (!("Notification" in window)) {
 			console.error("[PWA] This browser does not support desktop notification");
@@ -188,7 +189,6 @@ if ("serviceWorker" in navigator) {
 			console.log("[PWA] Permission to receive notifications has been granted");
 		} else if (Notification.permission !== "denied") {
 			Notification.requestPermission(function (permission) {
-				// If the user accepts, let's create a notification
 				if (permission === "granted") {
 					console.log("[PWA] Permission to receive notifications has been granted");
 				}

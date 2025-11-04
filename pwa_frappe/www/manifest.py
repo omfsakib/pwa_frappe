@@ -61,7 +61,7 @@ def get_context(context):
 
 	screenshots = frappe.get_all(
 		"Web App Manifest Screenshot",
-		fields=["src", "sizes", "type"],
+		fields=["src", "sizes", "type", "form_factor"],
 		filters={"parenttype": "Web App Manifest", "parent": pwa_manifest.name},
 	)
 	if screenshots:
@@ -71,6 +71,8 @@ def get_context(context):
 				s.pop("sizes")
 			if s.type is None:
 				s.pop("type")
+			if s.form_factor is None:
+				s.pop("form_factor")
 
 		context.screenshots = json.dumps(screenshots)
 

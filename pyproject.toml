@@ -1,7 +1,7 @@
 [project]
 name = "pwa_frappe"
 authors = [
-    { name = "tariqul@glascutr.com", email = "tariqul@glascutr.com"}
+    { name = "omfsakib@gmail.com", email = "omfsakib@gmail.com"}
 ]
 description = "Pwa Frappe"
 requires-python = ">=3.10"
@@ -9,10 +9,11 @@ readme = "README.md"
 dynamic = ["version"]
 dependencies = [
     # "frappe~=15.0.0" # Installed and managed by bench.
+    "py-vapid>=1.9.0"
 ]
 
 [build-system]
-requires = ["flit_core >=3.4,<4"]
+requires = ["flit_core >=3.4,<4", "py-vapid>=1.9.0"]
 build-backend = "flit_core.buildapi"
 
 # These dependencies are only installed when developer mode is enabled
