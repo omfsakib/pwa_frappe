@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/pwa_frappe/css/pwa_frappe.css"
-# app_include_js = "/assets/pwa_frappe/js/pwa_frappe.js"
+app_include_js = "/assets/pwa_frappe/js/pwa_frappe.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/pwa_frappe/css/pwa_frappe.css"
