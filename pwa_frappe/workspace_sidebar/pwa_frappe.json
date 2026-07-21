@@ -1,0 +1,61 @@
+{
+ "app": "pwa_frappe",
+ "creation": "2026-07-21 23:13:23.267070",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "header_icon": "grid",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Web App Manifest",
+   "link_to": "Web App Manifest",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Home",
+   "link_to": "PWA Frappe",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Service Worker",
+   "link_to": "Service Worker",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "FCM User Token",
+   "link_to": "FCM User Token",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-07-21 23:29:21.056613",
+ "modified_by": "Administrator",
+ "module": "Pwa Frappe",
+ "name": "PWA Frappe",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "PWA Frappe"
+}

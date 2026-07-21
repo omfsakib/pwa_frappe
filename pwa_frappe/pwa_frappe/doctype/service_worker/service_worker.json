@@ -8,7 +8,13 @@
  "field_order": [
   "generate_vapid_key",
   "vapid_public_key",
-  "vapid_private_key"
+  "vapid_private_key",
+  "fcm_section",
+  "enable_fcm",
+  "fcm_vapid_public_key",
+  "fcm_web_config",
+  "column_break_fcm",
+  "fcm_service_account_json"
  ],
  "fields": [
   {
@@ -27,6 +33,43 @@
    "fieldtype": "Long Text",
    "label": "VAPID Private Key",
    "read_only": 1
+  },
+  {
+   "fieldname": "fcm_section",
+   "fieldtype": "Section Break",
+   "label": "Firebase Cloud Messaging (FCM)"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_fcm",
+   "fieldtype": "Check",
+   "label": "Enable FCM Push Notifications"
+  },
+  {
+   "depends_on": "enable_fcm",
+   "description": "The VAPID key pair generated in the Firebase Console under Project Settings > Cloud Messaging > Web configuration.",
+   "fieldname": "fcm_vapid_public_key",
+   "fieldtype": "Data",
+   "label": "FCM VAPID Public Key"
+  },
+  {
+   "depends_on": "enable_fcm",
+   "description": "The Firebase web app config object (apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId), as JSON.",
+   "fieldname": "fcm_web_config",
+   "fieldtype": "Code",
+   "label": "FCM Web Config (JSON)",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "column_break_fcm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "enable_fcm",
+   "description": "Firebase service account JSON (with the Firebase Cloud Messaging API scope) used to send push notifications from the server.",
+   "fieldname": "fcm_service_account_json",
+   "fieldtype": "Password",
+   "label": "FCM Service Account JSON"
   }
  ],
  "icon": "fa fa-cog",
