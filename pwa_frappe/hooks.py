@@ -11,22 +11,23 @@ app_license = "mit"
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "pwa_frappe",
-# 		"logo": "/assets/pwa_frappe/logo.png",
-# 		"title": "Pwa Frappe",
-# 		"route": "/pwa_frappe",
-# 		"has_permission": "pwa_frappe.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": "pwa_frappe",
+		"logo": "/assets/pwa_frappe/images/logo.svg",
+		"title": "PWA Frappe",
+		"route": "/app/pwa-frappe",
+	}
+]
 
 # Includes in <head>
 # ------------------
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/pwa_frappe/css/pwa_frappe.css"
-app_include_js = "/assets/pwa_frappe/js/pwa_frappe.js"
+app_include_js = [
+	"pwa.bundle.js",
+]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/pwa_frappe/css/pwa_frappe.css"
@@ -137,13 +138,11 @@ app_include_js = "/assets/pwa_frappe/js/pwa_frappe.js"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Notification Log": {
+		"after_insert": "pwa_frappe.fcm.send_push_notification",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
