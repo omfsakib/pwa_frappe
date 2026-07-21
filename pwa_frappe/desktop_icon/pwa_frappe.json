@@ -1,0 +1,21 @@
+{
+ "app": "pwa_frappe",
+ "bg_color": "gray",
+ "creation": "2026-07-21 23:11:37.586440",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_type": "App",
+ "idx": 0,
+ "label": "Pwa Frappe",
+ "link": "/app/pwa-frappe",
+ "link_type": "External",
+ "logo_url": "/assets/pwa_frappe/images/logo.svg",
+ "modified": "2026-07-21 23:29:20.414835",
+ "modified_by": "Administrator",
+ "name": "Pwa Frappe",
+ "owner": "Administrator",
+ "restrict_removal": 0,
+ "roles": [],
+ "standard": 1
+}
