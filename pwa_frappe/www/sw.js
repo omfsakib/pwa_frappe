@@ -69,8 +69,16 @@ this.addEventListener('activate', function (event) {
         }));
 });
 
+// FCM config is passed as a query param when the service worker is registered
+// (see public/js/fcm.js). When present, Firebase Messaging owns 'push' handling.
+var fcmConfigParam = new URL(location).searchParams.get('config');
+
 // Respond to 'push' events and trigger notifications on the registration
+// Skipped when FCM is active to avoid double-handling FCM push payloads.
 this.addEventListener('push', function (event) {
+    if (fcmConfigParam) {
+        return;
+    }
     let title = (event.data && event.data.text());
     let tag = "push-frappe-notification";
     let icon = '{{ (favicon or "/assets/frappe/images/favicon.png") | abs_url }}';
@@ -78,6 +86,40 @@ this.addEventListener('push', function (event) {
     event.waitUntil(
         self.registration.showNotification(title, { icon, tag })
     );
+});
+
+// --- Firebase Cloud Messaging (background push) ---
+try {
+    if (fcmConfigParam) {
+        importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
+        importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js');
+
+        firebase.initializeApp(JSON.parse(fcmConfigParam));
+        var fcmMessaging = firebase.messaging();
+
+        fcmMessaging.onBackgroundMessage(function (payload) {
+            var data = payload.data || {};
+            var notificationTitle = data.title || 'Notification';
+            var notificationOptions = { body: data.body || '' };
+            if (data.notification_icon) {
+                notificationOptions.icon = data.notification_icon;
+            }
+            if (data.click_action) {
+                notificationOptions.data = { url: data.click_action };
+            }
+            self.registration.showNotification(notificationTitle, notificationOptions);
+        });
+    }
+} catch (err) {
+    console.error('[SW] Failed to initialize Firebase Cloud Messaging', err);
+}
+
+this.addEventListener('notificationclick', function (event) {
+    event.notification.close();
+    var url = event.notification.data && event.notification.data.url;
+    if (url) {
+        event.waitUntil(clients.openWindow(url));
+    }
 });
 
 
