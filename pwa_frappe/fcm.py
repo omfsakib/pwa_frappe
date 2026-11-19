@@ -30,18 +30,14 @@ def get_default_icon():
 
 @frappe.whitelist()
 def get_fcm_config() -> dict:
-	"""Returns the Firebase Web configuration and VAPID public key for the client SDK."""
-	settings = get_fcm_settings()
-	if not settings.enable_fcm:
-		frappe.throw(_("FCM push notifications are not enabled on this site"))
+	"""Returns the Firebase Web configuration and VAPID public key for the client SDK.
 
-	if not settings.fcm_web_config or not settings.fcm_vapid_public_key:
-		frappe.throw(
-			_(
-				"FCM is not configured on this site. Please set the FCM Web Config and "
-				"VAPID Public Key in Service Worker settings."
-			)
-		)
+	Every desk page load calls this. When FCM is disabled or not configured, it returns an
+	empty dict, and the client skips push setup without showing users an error.
+	"""
+	settings = get_fcm_settings()
+	if not settings.enable_fcm or not settings.fcm_web_config or not settings.fcm_vapid_public_key:
+		return {}
 
 	try:
 		config = json.loads(settings.fcm_web_config)
@@ -90,7 +86,8 @@ def send_push_notification(doc, method=None):
 		if not service_account_json:
 			return
 
-		title = NOTIFICATION_TYPE_TITLES.get(doc.type, "New Notification")
+		# Apps register their own Notification Types (e.g. "New Ticket"); their name reads well as a title.
+		title = NOTIFICATION_TYPE_TITLES.get(doc.type) or doc.type or "New Notification"
 		body = strip_html(doc.subject or "")[:200]
 
 		if doc.link:
